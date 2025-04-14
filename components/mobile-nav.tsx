@@ -44,7 +44,11 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border md:hidden">
+    <motion.div
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background/80 backdrop-blur-md border-t border-border md:hidden"
+    >
       <div className="grid h-full grid-cols-5">
         {navItems.map((item) => {
           const isActive = pathname === item.href
@@ -57,21 +61,31 @@ export function MobileNav() {
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
-              <div className="relative">
+              <motion.div
+                className="relative"
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 {isActive && (
                   <motion.div
                     layoutId="bubble"
-                    className="absolute -inset-1 rounded-full bg-primary/10"
+                    className="absolute -inset-3 rounded-full bg-primary/10"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <item.icon className={cn("h-6 w-6", isActive && "scale-110 transition-transform duration-200")} />
-              </div>
-              <span>{item.label}</span>
+                <item.icon className={cn("h-6 w-6")} />
+              </motion.div>
+              <motion.span
+                animate={{ scale: isActive ? 1.05 : 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                {item.label}
+              </motion.span>
             </Link>
           )
         })}
       </div>
-    </div>
+    </motion.div>
   )
 }
